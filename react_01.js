@@ -47,3 +47,35 @@ const otherDays = ["thu", "fri", "sat"];
 
 let alldays = [...days, ...otherDays];
 console.log(alldays);
+
+//React
+class Human {
+    constructor(name, lastName) {
+        this.name = name;
+        this.lastName = lastName;
+    }
+}
+
+const lee = new Human("min", "lee");
+console.log(lee);
+
+class Baby extends Human {
+    cry() {
+        console.log("Waaaa");
+    }
+    sayName() {
+        console.log(`My name is ${this.name}`);
+    }
+}
+const myBaby = new Baby("mini", "me");
+console.log(myBaby);
+console.log(myBaby.cry(), myBaby.sayName());
+
+const objA = {
+    name: "Nicolas",
+    favFood: "Kimchi"
+};
+
+const objB = {
+    password: "12345"
+};
