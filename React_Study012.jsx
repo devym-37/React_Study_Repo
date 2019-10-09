@@ -35,7 +35,15 @@ class SayHello extends React.Component {
     alert(this.state.message);
   };
 
+  static defaultProps = {
+    name: "lee"
+  };
+
   render() {
     return <button onClick={this.handleClick}>Say hello</button>;
   }
 }
+
+SayHello.defaultProps = {
+  name: "lee"
+};
