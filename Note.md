@@ -44,3 +44,25 @@ const deacription1 = data.desc || 'default value' // default value
 ```
 @babel/plugin-proposal-nullish-coalescing-operator을 적용하거나, 
 typescript 3.7.2 버전 이상을 사용 해야 합니다.
+
+3. Array.prototype.flat, Array.prototype.flatMap
+```js
+['abc', 'def', ['a',['b']]].flat() // ['abc','def','a',['b']]
+['abc', 'def', ['a',['b']]].flat(2) // ['abc','def','a','b']
+```
+
+4. Optional Catch
+```js
+try {
+  new Error('hello')
+} catch (error) {
+  console.error('error 안쓰지만');
+}
+
+try {
+  new Error('hello');
+} catch {
+  console.error('error 쓰지않아도 사용 가능');
+}
+
+```
