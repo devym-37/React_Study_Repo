@@ -25,3 +25,22 @@ const firstFriend = data?.user.friends?.[0] // undefined
 
 사용하기 위해선 @babel/plugin-proposal-optional-chaining을 적용하거나,
 typescript 3.7.2 버전 이상을 사용 해야 한다.
+
+2. Nullish coalescing Operator(??)
+??는 왼쪽 피연산자 값이 null이나 undefined일 경우 오른쪽 피연산자를 반환하고, 그렇지 않으면 왼쪽 피연산자를 return하는 연산자이다.
+
+기본 값 할당이나 분기처리에서 데이터 맞춰볼때 || 쓰는 부분에서 0, '', NaN 같은 falsy 값들을 유효한 값으로 생각한 경우 예기치 않은 결과가 발생 할 수 있는데, ??를 사용하면 null or undefined인 경우에만 기본 값을 할당해주기 때문에 좀 더 안전한 코드를 작성할 수 있다.
+
+```js
+const data = {
+    title: 'foo',
+    desc: ''
+}
+
+const description = data.desc ?? 'default value' // ''
+
+const deacription1 = data.desc || 'default value' // default value
+
+```
+@babel/plugin-proposal-nullish-coalescing-operator을 적용하거나, 
+typescript 3.7.2 버전 이상을 사용 해야 합니다.
