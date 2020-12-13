@@ -70,6 +70,43 @@ try {
 }
 ```
 
+5. Bitwise operator (~)
+   > ~ 는 -1을 제외한 truthy한 값을 리턴한다.
+
+```js
+if (arr.indexOf(item) > -1) {
+}
+
+if (~arr.indexOf(item)) {
+}
+```
+
+6. Object.entries() / Object.values()
+   > Object.entries() 는 객체에 담긴 키 / 값 들을 배열에 짝으로 변환한다.
+
+```js
+const credits = { producer: "John", director: "Jane", assistant: "Peter" };
+const arr = Object.entries(credits);
+console.log(arr);
+/*
+[ [ 'producer', 'John' ],
+  [ 'director', 'Jane' ],
+  [ 'assistant', 'Peter' ]
+]
+*/
+```
+
+> Object.values()는 Object.entries()와 같은 기능이지만 키 없이 값만 변환
+
+```js
+const credits = { producer: "John", director: "Jane", assistant: "Peter" };
+const arr = Object.values(credits);
+console.log(arr);
+// [ 'John', 'Jane', 'Peter' ]
+```
+
+---
+
 ---
 
 ### 함수형 프로그래밍이란 ?
