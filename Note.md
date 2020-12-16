@@ -172,3 +172,24 @@ let sortDesc = arr = {
 Object.freeze();
 // 를 사용하여 객체를 동결시킬 수 있다. 하지만, 최상위 객체만 동결되는 얕은 동결(shallow freeze)이다.
 ```
+
+```js
+const square = function (x) {
+  return x * x;
+}; // 익명함수
+
+const square = (x) => x * x; // 람다 표현식
+
+const obj = {
+  method: function (x) {
+    return x * x;
+  },
+};
+```
+
+sort() 함수는 comparator 함수에 구현된 정렬 기준에 따라 다르게 작동한다. comparator가 0보다 작은 값을 반환하면 p1이 p2 앞으로 온다. comparator가 0을 반환하면 p1,p2 순서는 그대로이다.
+
+**고계 함수**
+: 함수도 작동 원리는 일반 객체와 같아서 함수 인수로 전달하거나 함수를 반환받을 수 있다.
+
+클로저는 함수를 선언할 당시의 환경에 함수를 묶어둔 자료구조이다. 함수 선언부의 물리적 위치에 의존하므로 static scope / lexical scope 라고 한다. 함수가 자신을 둘러싼 주변 상태에 접근할 수 있기 때문에 클로저를 이용하면 명확하고 가독성 높은 코드를 작성할 수 있다. 스코프는 일련의 변수 바인딩을 한데 모아 변수가 정의된 코드 영역을 확정하는데, 사실상 클로저는 함수의 스코프를 상속한 것이다.
