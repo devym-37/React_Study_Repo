@@ -105,6 +105,27 @@ console.log(arr);
 // [ 'John', 'Jane', 'Peter' ]
 ```
 
+7. Pipeline operator
+: 실험적 기능으로, 표현식의 값을 함수에 전달한다. 파이프 연산자를 활용하면 중첩 함수 호출을 좀 더 읽기 좋은 형식으로 작성할 수 있다. 
+```js
+let url = "%21" |> decodeURI;
+
+// equal
+let url = decodeURI("%21");
+
+// expression |> function 
+// 지정한 expression의 값이 function의 유일한 매개변수로 전달된다.
+
+const double = (n) => n * 2;
+const increment = (n) => n + 1;
+
+// 파이프 연산자 없이
+double(increment(double(double(5)))); // 42
+
+// 파이프 연산자 사용
+5 |> double |> double |> increment |> double; // 42
+```
+
 ---
 
 ---
