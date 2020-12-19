@@ -224,3 +224,6 @@ sort() 함수는 comparator 함수에 구현된 정렬 기준에 따라 다르�
 ```js
 const name = p => p.fullname;
 ```
+
+**map**
+map(collect)은 배열 각 원소에 이터레이터 함수를 적용하여 크기가 같은 새 배열을 반환하는 고계함수이다. 
