@@ -234,3 +234,48 @@ map(collect)은 배열 각 원소에 이터레이터 함수를 적용하여 크�
 
 > 메서드를 체이닝 (단단한 결합, 제한된 표현성)
 > <br /> 함수 파이프라인을 배열 (느슨한 결합, 유연성)
+
+**함수 커링**
+: 함수 호출 시 여러 개의 인자를 한 번에 넘기지 않고, 한번에 하나의 인자를 넘기고, 함수를 인자의 개수만큼(여러 번) 호출하는 방식
+
+**setState()**
+
+1. setState()는 비동기로 작동
+2. setState()를 연속적으로 호출시 리액트 내부적으로 Batch처리를 한다.
+3. setState()를 state객체를 넘겨줄 수 있고, 새로운 state를 반환하는 함수를 인자로 넘겨줄 수 있다.
+
+: state --> object!
+
+```js
+const [number, setNumber] = useState(1);
+
+const multiplyBy2AndAddBy1 = () => {
+  setNumber(number * 2)
+  setNumber(number + 1)
+}
+
+const currentState = {
+  number : 1
+}
+
+const newState = Object.assign(currentState, { number: number * 2 }, {number: number + 1})
+// 마지막 객체로 덮어진다.
+
+setNumber(newState);
+
+---
+
+const multiplyBy2AndAddBy1 = () => {
+  setNumber(number => number * 2)
+  setNumber(number => number + 1)
+}
+
+// 이렇게 prevState로 받을 경우 정상 작동 가능
+
+```
+
+**useCallback & useMemo**
+
+1. 함수형 컴포넌트는 그냥 함수다. 함수형 컴포넌트는 단지 jsx를 반환하는 함수이다.
+2. 컴포넌트가 렌더링 된다는 것은 누군가가 그 함수를 호출하여서 실행되는 것을 말한다. 함수가 실행될 때마다 내부에 선언되어 있던 표현식도 매번 다시 선언되어 사용된다.
+3. 컴포넌트는 자신의 state가 변경되거나, 부모에게서 받는 props가 변경되었을 때마다 리렌더링 된다.(심지어 하위 컴포넌트에 최적화 설정을 해주지 않으면 부모에게서 받는 props가 변경되지 않았더라도 리렌더링 되는게 기본이다.)
