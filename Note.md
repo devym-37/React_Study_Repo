@@ -279,3 +279,14 @@ const multiplyBy2AndAddBy1 = () => {
 1. 함수형 컴포넌트는 그냥 함수다. 함수형 컴포넌트는 단지 jsx를 반환하는 함수이다.
 2. 컴포넌트가 렌더링 된다는 것은 누군가가 그 함수를 호출하여서 실행되는 것을 말한다. 함수가 실행될 때마다 내부에 선언되어 있던 표현식도 매번 다시 선언되어 사용된다.
 3. 컴포넌트는 자신의 state가 변경되거나, 부모에게서 받는 props가 변경되었을 때마다 리렌더링 된다.(심지어 하위 컴포넌트에 최적화 설정을 해주지 않으면 부모에게서 받는 props가 변경되지 않았더라도 리렌더링 되는게 기본이다.)
+
+### React Convention
+
+- with~ : 고차 컴포넌트
+- set~ : 값 설정
+- use~ : Hook API
+- PascalCase : type, interface, React component(function, class)
+- camelCase : variable(const, let), JavaScript function, custom hook, props
+- UPPER_SNAKE_CASE : tuple(as const 등)
+- 어떤 값으로부터 다른 값을 계산하는 함수 : get\_\_\_From( ... )
+  e.g. getTodayFrom(date: Date, index: number)
