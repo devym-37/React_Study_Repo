@@ -280,6 +280,12 @@ const multiplyBy2AndAddBy1 = () => {
 2. 컴포넌트가 렌더링 된다는 것은 누군가가 그 함수를 호출하여서 실행되는 것을 말한다. 함수가 실행될 때마다 내부에 선언되어 있던 표현식도 매번 다시 선언되어 사용된다.
 3. 컴포넌트는 자신의 state가 변경되거나, 부모에게서 받는 props가 변경되었을 때마다 리렌더링 된다.(심지어 하위 컴포넌트에 최적화 설정을 해주지 않으면 부모에게서 받는 props가 변경되지 않았더라도 리렌더링 되는게 기본이다.)
 
+#### 성능 향상을 위한 Memoization
+
+- `결과를 캐싱하고, 다음 작업에서 캐싱한 것을 재사용` 하는 비싼 작업의 속도를 높이는 자바스크립트 기술
+- `이전 값을 메모리에 저장해 동일한 계산의 반복을 제거해 빠른 처리를 가능하게 하는 기술`
+- `캐시에 초기 작업 결과를 저장하여 사용함으로 써 최적화 할 수 있다.` 만약 작업을 다시 수행해야 한다면, 어딘가에 저장되어진 동일한 결과를 단순히 반환 해준다.
+
 ### React Convention
 
 - with~ : 고차 컴포넌트
@@ -290,3 +296,49 @@ const multiplyBy2AndAddBy1 = () => {
 - UPPER_SNAKE_CASE : tuple(as const 등)
 - 어떤 값으로부터 다른 값을 계산하는 함수 : get\_\_\_From( ... )
   e.g. getTodayFrom(date: Date, index: number)
+
+### Iterable (feat. Array, Set, Map)
+
+#### Array
+
+```js
+const arr = [1, 2, 3];
+let iter1 = arr[Symbol.iterator](); // 이터레이터 생성
+for (const a of iter1) log(a);
+
+// result : 1 2 3
+```
+
+#### Set
+
+```js
+const set = new Set([1, 2, 3]);
+for (const a of set) log(a);
+
+// result : 1 2 3
+```
+
+#### Map
+
+```js
+const map = new Map([
+  ["a", 1],
+  ["b", 2],
+  ["c", 3],
+]);
+for (const a of map) log(a); // result : ["a", 1], ["b", 2], ["c", 3]
+for (const a of map.keys()) log(a); // 키 값만 출력됩니다.
+for (const a of map.values()) log(a);
+for (const a of map.entries()) log(a);
+```
+
+- map.keys()는 이터레이터를 리턴. 이 이터레이터는 value에 key만 담는다.
+- map.values()는 이터레이터 value에 map의 value 값만 담긴다.
+- map.entries()는 map에서 key, value 값을 모두 반환한다.
+
+#### Symbol.iterator
+
+- Symbol을 통해서 어떤 객체에 키로 사용할 수 있다.
+- iterable(이터러블) : 이터레이터를 리턴하는 [Symbol.iterator]() 를 가진 값
+- iterator(이터레이터) : { value, done } 객체를 리턴하는 next()를 가진 값
+- iterable/iterator 프로토콜 : iterable을 for...of, 전개 연산자 등과 함께 동작하도록한 규약
