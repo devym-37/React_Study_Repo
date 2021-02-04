@@ -286,6 +286,10 @@ const multiplyBy2AndAddBy1 = () => {
 - `이전 값을 메모리에 저장해 동일한 계산의 반복을 제거해 빠른 처리를 가능하게 하는 기술`
 - `캐시에 초기 작업 결과를 저장하여 사용함으로 써 최적화 할 수 있다.` 만약 작업을 다시 수행해야 한다면, 어딘가에 저장되어진 동일한 결과를 단순히 반환 해준다.
 
+#### 언제 React.memo를 사용하지 말아야 하나?
+
+- 일반적으로 class 기반의 컴포넌트를 래핑하는 것도 적절하지 않다. 이 경우 memoization을 해야겠다면, PureComponent를 확장하여 사용하거나 `shouldComponentUpdate()`를 사용 권장
+
 ### React Convention
 
 - with~ : 고차 컴포넌트
