@@ -346,3 +346,179 @@ for (const a of map.entries()) log(a);
 - iterable(이터러블) : 이터레이터를 리턴하는 [Symbol.iterator]() 를 가진 값
 - iterator(이터레이터) : { value, done } 객체를 리턴하는 next()를 가진 값
 - iterable/iterator 프로토콜 : iterable을 for...of, 전개 연산자 등과 함께 동작하도록한 규약
+
+## React 공식 문서
+
+**JSX 이해하기**
+: JSX는 React.craeteElement(component, props, ...children)함수에 대한 문법을 제공할 뿐이다.
+
+```js
+<MyButton color="blue" shadowSize={2}>
+  Click Me
+</MyButton>;
+
+//
+React.createElement(MyButton, { color: "blue", shadowSize: 2 }, "Click Me");
+// 이렇게 컴파일
+```
+
+JSX 태그의 첫 부분은 React element의 타입을 결정한다. 대문자로 시작하는 JSX 태그는 React 컴포넌트를 지정한다. 만약 <Foo />와 같은 JSX 표현을 쓰려고 한다면 Foo가 반드시 스코프 내에 존재해야 한다. `React가 스코프 내에 존재해야 한다` JSX는 React.createElement를 호출하는 코드로 컴파일 되기 때문에 React 라이브러리 역시 JSX 코드와 같은 스코프 내에 존재해야 한다.
+
+Props의 기본값은 "True"이다.
+
+```js
+<MyTextBox autocomplete />
+
+<MyTextBox autocomplete={true} />
+// 동일한 표현
+
+function App1() {
+  return <Greeting firstName="Ben" lastName="Hector" />;
+}
+
+function App2() {
+  const props = {firstName: 'Ben', lastName: 'Hector'};
+  return <Greeting {...props} />;
+}
+
+const Button = props => {
+  const { kind, ...other } = props;
+  const className = kind === "primary" ? "PrimaryButton" : "SecondaryButton";
+  return <button className={className} {...other} />;
+};
+
+const App = () => {
+  return (
+    <div>
+      <Button kind="primary" onClick={() => console.log("clicked!")}>
+        Hello World!
+      </Button>
+    </div>
+  );
+};
+```
+
+**함수를 자식으로 사용하기**
+: 보통 JSX에 삽입된 Javascript 표현식은 문자열, React element 혹은 이들의 배열로 환산된다. 하지만, props.children은 다른 prop들과 마찬가지로 React가 렌더링 할 수 있는 데이터의 형태뿐만 아니라 어떤 형태의 데이터도 넘겨질 수 있다. 예시와 같은 컴포넌트가 있다면 props.children을 통해서 콜백을 넘겨받을 수 있다.
+
+```js
+// 자식 콜백인 numTimes를 호출하여 반복되는 컴포넌트를 생성합니다.
+function Repeat(props) {
+  let items = [];
+  for (let i = 0; i < props.numTimes; i++) {
+    items.push(props.children(i));
+  }
+  return <div>{items}</div>;
+}
+
+function ListOfTenThings() {
+  return (
+    <Repeat numTimes={10}>
+      {(index) => <div key={index}>This is item {index} in the list</div>}
+    </Repeat>
+  );
+}
+```
+
+**Portals**
+: Portal은 부모 컴포넌트의 DOM 계층 구조 바깥에 있는 DOM 노드로 자식을 렌더링하는 최고의 방법을 제공한다.
+
+```js
+ReactDOM.createPortal(child, container);
+```
+
+첫번째 인자(child)는 엘리먼트, 문자열, 혹은 fragment와 같은 어떤 종류이든 렌더링할 수 있는 React자식이다. 두번째 인자(container)는 DOM 엘리먼트이다.
+
+```js
+render() {
+  // React는 새로운 div를 마운트하고 그 안에 자식을 렌더링합니다.
+  return (
+    <div>
+      {this.props.children}
+    </div>
+  );
+}
+```
+
+**Ref와 DOM**
+: Ref는 render 메서드에서 생성된 DOM 노드나 React 엘리먼트에 접근하는 방법을 제공한다.
+일반적인 React의 데이터 플로우에서 props는 부모 컴포넌트가 자식과 상호작용할 수 있는 유일한 수단이다. 자식을 수정하려면 새로운 props를 전달하여 자식을 다시 렌더링해야 한다. 하지만, 일반적인 데이터 플로우에서 벗어나 직접적으로 자식을 수정해야 하는 경우에 React 컴포넌트의 인스턴스일 수도 있고, DOM 엘리먼트일 수도 있다.
+
+#### Ref를 사용해야 할 때
+
+- 포커스, 텍스트 선택영역, 혹은 미디어의 재생을 관리할 때
+- 애니메이션을 직접적으로 실행시킬 때
+- 서드 파티 DOM 라이브러리를 React와 같이 사용할 때
+
+**선언적으로 해결될 수 있는 문제에서는 ref 사용을 지양**
+
+#### Ref를 남용하지 않는다
+
+: ref는 애플리케이션에 '어떤 일이 일어나게'할 때 사용될 수도 있다. 그럴 때는 잠시 멈추고 어느 컴포넌트 계층에서 상태를 소유해야 하는지 신중하게 생각해본다. 대부분의 경우, 상태를 소유해야 하는 적절한 장소가 더 높은 계층이라는 결론이 난다.
+
+```js
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.myRef = React.createRef();
+  }
+  render() {
+    return <div ref={this.myRef} />;
+  }
+}
+```
+
+**Ref에 접근하기**
+: render 메서드 안에서 ref가 엘리먼트에게 전달되었을 때, 그 노드를 향한 참조는 ref의 current 어트리뷰트에 담기게 된다.
+
+```js
+const node = this.myRef.current;
+```
+
+컴포넌트가 마운트될 때 React는 current 프로퍼티에 DOM 엘리먼트를 대입하고, 컴포넌트의 마운트가 해제될 때 current 프로퍼티를 다시 null로 돌려 놓는다. ref를 수정하는 작업은 componentDidMount 또는 componentDidUpdate 생명주기 메서드가 호출되기 전에 이루어진다.
+
+**Ref와 함수 컴포넌트**
+
+- 함수 컴포넌트는 인스턴스가 없기 때문에 함수 컴포넌트에 ref 어트리뷰트를 사용할 수 없다.
+
+```js
+function MyFunctionComponent() {
+  return <input />;
+}
+
+class Parent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.textInput = React.createRef();
+  }
+  render() {
+    // 이 코드는 동작하지 않습니다.
+    return <MyFunctionComponent ref={this.textInput} />;
+  }
+}
+```
+
+: 함수 컴포넌트에 ref에 사용할 수 있도록 하려면, forwardRef를 사용하거나 클래스 컴포넌트로 변경할 수 있다.
+
+다만, DOM엘리먼트나 클래스 컴포넌트의 인스턴스에 접근하기 위해 ref 어트리뷰트를 함수 컴포넌트에서 사용하는 것은 된다.
+
+```js
+function CustomTextInput(props) {
+  // textInput은 ref 어트리뷰트를 통해 전달되기 위해서
+  // 이곳에서 정의되어야만 합니다.
+  const textInput = useRef(null);
+
+  function handleClick() {
+    textInput.current.focus();
+  }
+
+  return (
+    <div>
+      <input type="text" ref={textInput} />
+      <input type="button" value="Focus the text input" onClick={handleClick} />
+    </div>
+  );
+}
+```
+
+ref 콜백들은 componentDidMount 또는 componentDidUpdate가 호출되기 전에 호출된다.
