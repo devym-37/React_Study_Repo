@@ -254,3 +254,229 @@ function add(a: number, b: number = 2): number {
   return a + b;
 }
 ```
+
+#### Interface
+
+: 인터페이스(Interface)는 타입스크립트 여러 객체를 정의하는 일종의 규칙이며 구조이다.
+
+```js
+interface IUser {
+  name: string,
+  age: number,
+  isAdult: boolean
+}
+
+let user1: IUser = {
+  name: 'Neo',
+  age: 123,
+  isAdult: true
+};
+
+// Error - TS2741: Property 'isAdult' is missing in type '{ name: string; age: number; }' but required in type 'IUser'.
+let user2: IUser = {
+  name: 'Evan',
+  age: 456
+};
+
+// :(colon), ,(comma) 혹은 기호를 사용하지 않을 수 있다
+interface IUser {
+  name: string,
+  age: number
+}
+// Or
+interface IUser {
+  name: string;
+  age: number;
+}
+// Or
+interface IUser {
+  name: string
+  age: number
+}
+
+// ? 를 사용하면 선택적 속성으로 정의할 수 있다
+interface IUser {
+  name: string,
+  age: number,
+  isAdult?: boolean // Optional property
+}
+
+// `isAdult`를 초기화하지 않아도 에러가 발생하지 않습니다.
+let user: IUser = {
+  name: 'Neo',
+  age: 123
+};
+```
+
+#### 클래스 타입
+
+: 인터페이스로 클래스를 정의하는 경우, `implements` 키워드를 사용한다
+
+```js
+interface IUser {
+  name: string,
+  getName(): string
+}
+
+class User implements IUser {
+  constructor(public name: string) {}
+  getName() {
+    return this.name;
+  }
+}
+
+const neo = new User('Neo');
+neo.getName(); // Neo
+```
+
+만약 정의한 클래스를 인수로 사용하는 경우 Construct signature를 제공하여 사용한다
+
+```js
+interface ICat {
+  name: string
+}
+interface ICatConstructor {
+  new (name: string): ICat;
+}
+
+class Cat implements ICat {
+  constructor(public name: string) {}
+}
+
+function makeKitten(c: ICatConstructor, n: string) {
+  return new c(n); // ok
+}
+const kitten = makeKitten(Cat, 'Lucy');
+console.log(kitten);
+```
+
+#### 인덱싱 가능 타입
+
+: 인덱서의 타입은 `string`과 `number`만 지정 할 수 있다
+
+```js
+interface IItem {
+  [itemIndex: number]: string; // Index signature
+}
+let item: IItem = ['a', 'b', 'c']; // Indexable type
+console.log(item[0]); // 'a' is string.
+console.log(item[1]); // 'b' is string.
+console.log(item['0']); // Error - TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+
+interface IItem {
+  [itemIndex: number]: string | boolean | number[];
+}
+let item: IItem = ['Hello', false, [1, 2, 3]];
+console.log(item[0]); // Hello
+console.log(item[1]); // false
+console.log(item[2]); // [1, 2, 3]
+```
+
+#### 인터페이스 확장
+
+: 인터페이스도 클래스처럼 `extends` 키워드를 활용해 상속할 수 있다
+
+```js
+interface IAnimal {
+  name: string;
+}
+interface ICat extends IAnimal {
+  meow(): string;
+}
+
+class Cat implements ICat {
+  // Error - TS2420: Class 'Cat' incorrectly implements interface 'ICat'. Property 'name' is missing in type 'Cat' but required in type 'ICat'.
+  meow() {
+    return 'MEOW~';
+  }
+}
+
+// 동일한 인터페이스를 여러 개 만들 수 있다
+interface IFullName {
+  firstName: string;
+  lastName: string;
+}
+interface IFullName {
+  middleName: string;
+}
+
+const fullName: IFullName = {
+  firstName: 'Tomas',
+  middleName: 'Sean',
+  lastName: 'Connery',
+};
+```
+
+#### Type
+
+: `type`키워드를 사용해 새로운 타입 조합을 만들 수 있다
+
+```js
+type MyType = string;
+type YourType = string | number | boolean;
+type TUser =
+  | {
+      name: string,
+      age: number,
+      isValid: boolean,
+    }
+  | [string, number, boolean];
+
+let userA: TUser = {
+  name: 'Neo',
+  age: 85,
+  isValid: true,
+};
+let userB: TUser = ['Evan', 36, false];
+
+function someFunc(arg: MyType): YourType {
+  switch (arg) {
+    case 's':
+      return arg.toString(); // string
+    case 'n':
+      return parseInt(arg); // number
+    default:
+      return true; // boolean
+  }
+}
+```
+
+#### 제네릭(Generic)
+
+: 재사용을 목적으로 함수나 클래스의 선언 시점이 아닌, *사용 시점에 타입을 선언*할 수 있는 방법을 제공한다.
+함수 이름 우축에 `<T>`를 작성해 시작한다. `T`는 타입 변수로 사용자가 제공한 타입으로 변환될 식별자이다.
+
+```js
+function toArray<T>(a: T, b: T): T[] {
+  return [a, b];
+}
+
+toArray < number > (1, 2);
+toArray < string > ('1', '2');
+(toArray < string) | (number > (1, '2'));
+toArray < number > (1, '2'); // Error
+
+// 타입 추론을 활용해, 사용 시점에 타입을 제공하지 않을 수 있다
+function toArray<T>(a: T, b: T): T[] {
+  return [a, b];
+}
+
+toArray(1, 2);
+toArray('1', '2');
+toArray(1, '2'); // Error
+```
+
+대표적으로 `type`과 `interface` 키워드를 사용하는 타입 선언은 `=`기호를 기준으로 '식별자'와 '타입 구현'으로 구분할 수 있다. 제약 조건은 '식별자'영역에서 사용하는 `extends`에 해당한다.
+
+```js
+type U = string | number | boolean;
+
+// type 식별자 = 타입 구현
+type MyType<T extends U> = string | T;
+
+// interface 식별자 { 타입 구현 }
+interface IUser<T extends U> {
+  name: string,
+  age: T
+}
+```
