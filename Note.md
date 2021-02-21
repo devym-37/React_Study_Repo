@@ -9,7 +9,7 @@
 ```js
 const data = {
   user: {
-    name: "foo",
+    name: 'foo',
     getName() {
       return this.name;
     },
@@ -34,13 +34,13 @@ typescript 3.7.2 버전 이상을 사용 해야 한다.
 
 ```js
 const data = {
-  title: "foo",
-  desc: "",
+  title: 'foo',
+  desc: '',
 };
 
-const description = data.desc ?? "default value"; // ''
+const description = data.desc ?? 'default value'; // ''
 
-const deacription1 = data.desc || "default value"; // default value
+const deacription1 = data.desc || 'default value'; // default value
 ```
 
 @babel/plugin-proposal-nullish-coalescing-operator을 적용하거나,
@@ -49,24 +49,24 @@ typescript 3.7.2 버전 이상을 사용 해야 합니다.
 3. Array.prototype.flat, Array.prototype.flatMap
 
 ```js
-["abc", "def", ["a", ["b"]]]
+['abc', 'def', ['a', ['b']]]
   .flat() // ['abc','def','a',['b']]
-  [("abc", "def", ["a", ["b"]])].flat(2); // ['abc','def','a','b']
+  [('abc', 'def', ['a', ['b']])].flat(2); // ['abc','def','a','b']
 ```
 
 4. Optional Catch
 
 ```js
 try {
-  new Error("hello");
+  new Error('hello');
 } catch (error) {
-  console.error("error 안쓰지만");
+  console.error('error 안쓰지만');
 }
 
 try {
-  new Error("hello");
+  new Error('hello');
 } catch {
-  console.error("error 쓰지않아도 사용 가능");
+  console.error('error 쓰지않아도 사용 가능');
 }
 ```
 
@@ -85,7 +85,7 @@ if (~arr.indexOf(item)) {
    > Object.entries() 는 객체에 담긴 키 / 값 들을 배열에 짝으로 변환한다.
 
 ```js
-const credits = { producer: "John", director: "Jane", assistant: "Peter" };
+const credits = { producer: 'John', director: 'Jane', assistant: 'Peter' };
 const arr = Object.entries(credits);
 console.log(arr);
 /*
@@ -99,7 +99,7 @@ console.log(arr);
 > Object.values()는 Object.entries()와 같은 기능이지만 키 없이 값만 변환
 
 ```js
-const credits = { producer: "John", director: "Jane", assistant: "Peter" };
+const credits = { producer: 'John', director: 'Jane', assistant: 'Peter' };
 const arr = Object.values(credits);
 console.log(arr);
 // [ 'John', 'Jane', 'Peter' ]
@@ -109,10 +109,10 @@ console.log(arr);
    : 실험적 기능으로, 표현식의 값을 함수에 전달한다. 파이프 연산자를 활용하면 중첩 함수 호출을 좀 더 읽기 좋은 형식으로 작성할 수 있다.
 
 ```js
-let url = "%21" |> decodeURI;
+let url = '%21' |> decodeURI;
 
 // equal
-let url = decodeURI("%21");
+let url = decodeURI('%21');
 
 // expression |> function
 // 지정한 expression의 값이 function의 유일한 매개변수로 전달된다.
@@ -215,6 +215,38 @@ sort() 함수는 comparator 함수에 구현된 정렬 기준에 따라 다르�
 : 함수도 작동 원리는 일반 객체와 같아서 함수 인수로 전달하거나 함수를 반환받을 수 있다.
 
 클로저는 함수를 선언할 당시의 환경에 함수를 묶어둔 자료구조이다. 함수 선언부의 물리적 위치에 의존하므로 static scope / lexical scope 라고 한다. 함수가 자신을 둘러싼 주변 상태에 접근할 수 있기 때문에 클로저를 이용하면 명확하고 가독성 높은 코드를 작성할 수 있다. 스코프는 일련의 변수 바인딩을 한데 모아 변수가 정의된 코드 영역을 확정하는데, 사실상 클로저는 함수의 스코프를 상속한 것이다.
+
+**은닉화**
+클로저를 이용해서 객체지향 프로그래밍의 프라이빗 메서드를 흉내 낼 수 있는데, 이를 **모듈 패턴**이라 한다. 각 클로저는 변수에 대해 각각 다른 버전을 참조하게 되므로 서로 다른 변수에 영향을 주지 않는다. 이런 방식으로 클로저를 사용하여 객체지향 프로그래밍의 정보 은닉과 캡슐화 같은 이점들을 얻을 수 있다.
+자바스크립트에서는 인스턴스를 생성할 때 Private 변수에 대한 접근 권한 문제가 있다.
+
+```js
+function CreateKey(key) {
+  this._key = key;
+}
+
+var obj = new CreateKey('mykey');
+console.log(obj._key); // myKey
+
+obj._key = 'yourKey';
+console.log(obj._key); // yourKey
+```
+
+변수명 앞에 `_`를 포함하였기 때문에 Private 변수로 쓰고 싶다는 의도를 알 수 있지만, 의도와는 달리 `_key` 속성은 동적으로 변경될 수 있다.
+클로저를 사용한다면 외부에서 내부변수에 접근하는 것을 제한할 수 있다.
+
+```js
+function ClosureKey(key) {
+  var _key = key;
+  return function () {
+    console.log(_key);
+  };
+}
+
+var closureObj = ClosureKey('newKey');
+closureObj(); // newKey
+console.log(closureObj._key); // undefined
+```
 
 **메서드 체이닝**
 : 메서드 체이닝은 여러 메서드를 단일 구문으로 호출하는 OOP 패턴이다. 대부분 객체지향 프로그램에서 불변 객체에 많이 적용하는 패턴이지만 함수형 프로그래밍에도 잘 맞는다.
@@ -326,9 +358,9 @@ for (const a of set) log(a);
 
 ```js
 const map = new Map([
-  ["a", 1],
-  ["b", 2],
-  ["c", 3],
+  ['a', 1],
+  ['b', 2],
+  ['c', 3],
 ]);
 for (const a of map) log(a); // result : ["a", 1], ["b", 2], ["c", 3]
 for (const a of map.keys()) log(a); // 키 값만 출력됩니다.
@@ -358,7 +390,7 @@ for (const a of map.entries()) log(a);
 </MyButton>;
 
 //
-React.createElement(MyButton, { color: "blue", shadowSize: 2 }, "Click Me");
+React.createElement(MyButton, { color: 'blue', shadowSize: 2 }, 'Click Me');
 // 이렇게 컴파일
 ```
 
