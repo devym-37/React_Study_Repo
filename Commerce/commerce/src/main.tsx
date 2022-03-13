@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, useRoutes } from "react-router-dom";
+import "../src/scss/index.scss";
 
 import App from "./app";
 
