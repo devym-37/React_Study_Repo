@@ -1,6 +1,6 @@
 import { SyntheticEvent } from "react";
 import { useMutation } from "react-query";
-import { CartType, UPDATE_CART } from "../../graphql/cart";
+import { CartType, DELETE_CART, UPDATE_CART } from "../../graphql/cart";
 import { getClient, graphqlFetcher, QueryKeys } from "../../queryClient";
 
 const CartItem = ({ id, imageUrl, price, title, amount }: CartType) => {
@@ -22,23 +22,38 @@ const CartItem = ({ id, imageUrl, price, title, amount }: CartType) => {
             },
             onSuccess: (newValue) => {
                 const prevCart = queryClient.getQueriesData<{ [key: string]: CartType }>(QueryKeys.CART);
-                const newCart = { ...(prevCart || {}), ...prevCart };
+                const newCart = { ...(prevCart || {}), [id]: newValue };
                 queryClient.setQueryData(QueryKeys.CART, newCart);
             },
         }
     );
 
+    const { mutate: deleteCart } = useMutation(({ id }: { id: string }) => graphqlFetcher(DELETE_CART, { id }), {
+        onSuccess: () => {
+            queryClient.invalidateQueries(QueryKeys.CART);
+        },
+    });
+
     const handleUpdateAmount = (e: SyntheticEvent) => {
         const amount = Number((e.target as HTMLInputElement).value);
+        if (amount < 1) return;
         updateCart({ id, amount });
+    };
+
+    const handleDeleteItem = () => {
+        deleteCart({ id });
     };
 
     return (
         <li className='cart-item'>
-            <img src={imageUrl} />
+            <input className='cart-item__checkbox' type='checkbox' name='select-item' />
+            <img className='cart-item__image' src={imageUrl} />
             <p className='cart-item__price'>{price}</p>
             <p className='cart-item__title'>{title}</p>
-            <input type='number' className='cart-item__amount' value={amount} onChange={handleUpdateAmount} />
+            <input className='cart-item__amount' type='number' value={amount} min={1} onChange={handleUpdateAmount} />
+            <button className='cart-item__button' type='button' onClick={handleDeleteItem}>
+                삭제
+            </button>
         </li>
     );
 };
