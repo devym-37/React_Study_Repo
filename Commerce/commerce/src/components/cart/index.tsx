@@ -1,8 +1,14 @@
-import { createRef, SyntheticEvent, useRef } from "react";
+import { createRef, SyntheticEvent, useEffect, useRef, useState } from "react";
+import { useSetRecoilState } from "recoil";
 import { CartType } from "../../graphql/cart";
+import { checkedCartState } from "../../recoils/cart";
 import CartItem from "./item";
+import WillPay from "./willPay";
 
 const CartList = ({ items }: { items: CartType[] }) => {
+    const setCheckedCartData = useSetRecoilState(checkedCartState);
+    const [formData, setFormData] = useState<FormData>();
+
     const formRef = useRef<HTMLFormElement>(null);
     const checkBoxRefs = items.map(() => createRef<HTMLInputElement>());
 
@@ -24,7 +30,17 @@ const CartList = ({ items }: { items: CartType[] }) => {
             const allChecked = selectedCount === items.length;
             formRef.current.querySelector<HTMLInputElement>(".select-all")!.checked = allChecked;
         }
+        setFormData(data);
     };
+
+    // useEffect(() => {
+    //     const checkedItems = checkBoxRefs.reduce<CartType[]>((res, ref, i) => {
+    //         if (ref.current!.checked) res.push(items[i]);
+    //         return res;
+    //     }, []);
+
+    //     setCheckedCartData(checkedItems);
+    // }, [items, formData]);
 
     return (
         <div>
@@ -39,6 +55,7 @@ const CartList = ({ items }: { items: CartType[] }) => {
                     ))}
                 </ul>
             </form>
+            {/* <WillPay /> */}
         </div>
     );
 };

@@ -19,3 +19,24 @@
     &__title {
     }
 }
+
+.cart-willPay {
+    border: 1px solid #000;
+    padding: 10px;
+
+    ul {
+        display: flex;
+        gap: 10px;
+    }
+
+    li {
+        border: 1px solid #000;
+        padding: 1px;
+    }
+
+    img {
+        width: 100px;
+        height: 75px;
+        object-fit: contain;
+    }
+}

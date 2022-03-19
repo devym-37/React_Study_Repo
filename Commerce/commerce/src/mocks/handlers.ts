@@ -63,6 +63,7 @@ export const handlers = [
             ...newData[id],
             amount,
         };
+        console.log("newData", newData);
 
         newData[id] = newItem;
         cartData = newData;
