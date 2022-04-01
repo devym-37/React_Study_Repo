@@ -38,7 +38,6 @@ const CartItem = ({ id, imageUrl, price, title, amount }: CartType, ref: Forward
     });
 
     const handleUpdateAmount = (e: SyntheticEvent) => {
-        console.log("handleUpdateAmount");
         const amount = Number((e.target as HTMLInputElement).value);
         if (amount < 1) return;
         updateCart({ id, amount });
@@ -50,7 +49,7 @@ const CartItem = ({ id, imageUrl, price, title, amount }: CartType, ref: Forward
 
     return (
         <li className='cart-item'>
-            <input className='cart-item__checkbox' type='checkbox' name='select-item' ref={ref} />
+            <input className='cart-item__checkbox' type='checkbox' name='select-item' ref={ref} data-id={id} />
             <ItemData imageUrl={imageUrl} price={price} title={title} />
             <input className='cart-item__amount' type='number' value={amount} min={1} onChange={handleUpdateAmount} />
             <button className='cart-item__button' type='button' onClick={handleDeleteItem}>
