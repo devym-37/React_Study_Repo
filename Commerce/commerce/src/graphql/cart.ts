@@ -33,7 +33,7 @@ export const UPDATE_CART = gql`
 `;
 
 export const DELETE_CART = gql`
-    mutation UPDATE_CART($id: string) {
+    mutation DELETE_CART($id: string) {
         id
     }
 `;
