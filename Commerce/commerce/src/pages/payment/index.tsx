@@ -1,3 +1,5 @@
-const Payment = () => <div>결제</div>;
+import Payment from "../../components/payment";
 
-export default Payment;
+const PaymentPage = () => <Payment />;
+
+export default PaymentPage;

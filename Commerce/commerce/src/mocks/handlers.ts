@@ -1,6 +1,7 @@
 import { graphql } from "msw";
 import { v4 as uuid } from "uuid";
 import { GET_CART, ADD_CART, CartType, UPDATE_CART, DELETE_CART } from "../graphql/cart";
+import { EXECUTE_PAY } from "../graphql/payment";
 import GET_PRODUCTS, { GET_PRODUCT } from "../graphql/products";
 
 const mockProducts = (() =>
@@ -75,5 +76,9 @@ export const handlers = [
         delete newData[id];
         cartData = newData;
         return res(ctx.data(id));
+    }),
+
+    graphql.mutation(EXECUTE_PAY, ({ variables }, res, ctx) => {
+        return res();
     }),
 ];

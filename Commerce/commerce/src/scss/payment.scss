@@ -1,0 +1,34 @@
+#modal .modal {
+    display: none;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+
+    .modal__inner {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        background-color: #fff;
+        padding: 20px;
+        width: 80%;
+        max-width: 600px;
+        height: 600px;
+        transform: translate(-50%, -50%);
+    }
+
+    &:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    &.show {
+        display: block;
+    }
+}
