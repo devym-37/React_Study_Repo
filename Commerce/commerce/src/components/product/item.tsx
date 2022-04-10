@@ -17,7 +17,7 @@ const ProductItem = ({ id, title, price, imageUrl, description, createdAt }: Pro
             <button className='product-item__add-cart' onClick={() => addCart(id)}>
                 상품 담기
             </button>
-            <span>{undefined || 0}</span>
+            {/* <span>{undefined || 0}</span> */}
         </li>
     );
 };
