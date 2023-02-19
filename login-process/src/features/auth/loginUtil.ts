@@ -1,4 +1,4 @@
-export const getErrorMessage = (error: unknown): string => {
+export const getErrorMessage = (error: any): string => {
     if (!error) {
         return "No Server Response";
     }
