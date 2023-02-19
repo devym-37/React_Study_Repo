@@ -28,7 +28,13 @@ const Login = () => {
         e.preventDefault();
         try {
             const userData = await login({ user, password }).unwrap();
-            // NOTE
+            /*
+            useMutation hook은 'mutation trig'기능을 포함하는 튜플과 'mutation 결과'에
+            대한 속성을 포함하는 객체를 반환한다. 'mutation trigger' 호출은 endpoint에 대한 mutation
+            request을 시작하는 기능이다. 'mutation trigger'를 호출하면, unwrap 프로퍼티를 가진
+            Promise을 리턴한다. unwrap을 호출하면 바로 raw response/error를 제공한다.
+            
+            */
             dispatch(setCredentials({ ...userData, user }));
             setUser("");
             setPassword("");
