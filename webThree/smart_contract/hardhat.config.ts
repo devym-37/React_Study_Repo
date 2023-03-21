@@ -1,8 +1,7 @@
 // https://eth-goerli.g.alchemy.com/v2/mKjmyXRhsHS9yC_nIBReiWlzJRwOvspm
-import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
+require("@nomiclabs/hardhat-waffle");
 
-const config: HardhatUserConfig = {
+module.exports = {
     solidity: "0.8.18",
     networks: {
         goelri: {
@@ -11,5 +10,3 @@ const config: HardhatUserConfig = {
         },
     },
 };
-
-export default config;
