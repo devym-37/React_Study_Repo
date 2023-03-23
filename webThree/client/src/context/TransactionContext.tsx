@@ -3,7 +3,11 @@ import { ethers } from "ethers";
 
 import { contractAbi, contractAddress } from "../utils/constants";
 
-export const TransactionContext = React.createContext();
+export interface ContextInfo {
+    value: string;
+}
+
+export const TransactionContext = React.createContext<ContextInfo>();
 
 const { ethereum } = window;
 
@@ -16,6 +20,18 @@ const getEthereumContract = () => {
     console.log({ provider, signer, transactionContract });
 };
 
-export const TransactionProvider = ({ children }) => {
-    return <TransactionContext.Provider value={{}}>{children}</TransactionContext.Provider>;
+export const TransactionProvider = ({ children }: { children: React.ReactNode }) => {
+    const checkIfWalletIsConnected = async () => {
+        if (!ethereum) return alert("metamask 설치해주세요");
+
+        const accounts = await ethereum.request({ method: "eth_accounts" });
+
+        console.log("accounts :>> ", accounts);
+    };
+
+    useEffect(() => {
+        checkIfWalletIsConnected();
+    }, []);
+
+    return <TransactionContext.Provider value={{ value: "test" }}>{children}</TransactionContext.Provider>;
 };
