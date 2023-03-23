@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 import { contractAbi, contractAddress } from "../utils/constants";
 
 export interface ContextInfo {
-    value: string;
+    connectWallet: () => void;
 }
 
 export const TransactionContext = React.createContext<ContextInfo>();
@@ -21,6 +21,8 @@ const getEthereumContract = () => {
 };
 
 export const TransactionProvider = ({ children }: { children: React.ReactNode }) => {
+    const [currentAccount, setCurrentAccount] = useState("");
+
     const checkIfWalletIsConnected = async () => {
         if (!ethereum) return alert("metamask 설치해주세요");
 
@@ -29,9 +31,23 @@ export const TransactionProvider = ({ children }: { children: React.ReactNode })
         console.log("accounts :>> ", accounts);
     };
 
+    const connectWallet = async () => {
+        try {
+            if (!ethereum) return alert("metamask 설치해주세요");
+
+            const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+
+            setCurrentAccount(accounts[0]);
+        } catch (error) {
+            console.log("connectWallet_Error : ", error);
+
+            throw new Error("No ethereum object.");
+        }
+    };
+
     useEffect(() => {
         checkIfWalletIsConnected();
     }, []);
 
-    return <TransactionContext.Provider value={{ value: "test" }}>{children}</TransactionContext.Provider>;
+    return <TransactionContext.Provider value={{ connectWallet }}>{children}</TransactionContext.Provider>;
 };
