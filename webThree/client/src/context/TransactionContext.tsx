@@ -15,6 +15,7 @@ export interface ContextInfo {
             message: string;
         }>
     >;
+    transactions: any[];
     handleChange: (e: React.ChangeEvent<HTMLInputElement>, name: string) => void;
     sendTransaction: () => void;
 }
@@ -39,6 +40,7 @@ export const TransactionProvider = ({ children }: { children: React.ReactNode })
     const [formData, setformData] = useState({ addressTo: "", amount: "", keyword: "", message: "" });
     const [isLoading, setLoading] = useState(false);
     const [transactionCount, setTransactionCount] = useState(localStorage.getItem("transactionCount"));
+    const [transactions, setTransactions] = useState([]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
         setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
@@ -52,6 +54,8 @@ export const TransactionProvider = ({ children }: { children: React.ReactNode })
 
             if (accounts.length) {
                 setCurrentAccount(accounts[0]);
+
+                getAllTransactions();
             } else {
                 console.log("No accounts found");
             }
@@ -60,6 +64,33 @@ export const TransactionProvider = ({ children }: { children: React.ReactNode })
             console.log("checkIfWalletIsConnected_Error : ", error);
 
             throw new Error("No ethereum object.");
+        }
+    };
+
+    const getAllTransactions = async () => {
+        try {
+            if (ethereum) {
+                const transactionsContract = getEthereumContract();
+
+                const availableTransactions = await transactionsContract.getAllTransactions();
+
+                const structuredTransactions = availableTransactions.map((transaction) => ({
+                    addressTo: transaction.receiver,
+                    addressFrom: transaction.sender,
+                    timestamp: new Date(transaction.timestamp.toNumber() * 1000).toLocaleString(),
+                    message: transaction.message,
+                    keyword: transaction.keyword,
+                    amount: parseInt(transaction.amount._hex) / 10 ** 18,
+                }));
+
+                console.log(structuredTransactions);
+
+                setTransactions(structuredTransactions);
+            } else {
+                console.log("Ethereum is not present");
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
 
@@ -128,7 +159,15 @@ export const TransactionProvider = ({ children }: { children: React.ReactNode })
 
     return (
         <TransactionContext.Provider
-            value={{ connectWallet, currentAccount, formData, setformData, handleChange, sendTransaction }}
+            value={{
+                connectWallet,
+                currentAccount,
+                transactions,
+                formData,
+                setformData,
+                handleChange,
+                sendTransaction,
+            }}
         >
             {children}
         </TransactionContext.Provider>

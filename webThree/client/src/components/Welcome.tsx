@@ -5,6 +5,7 @@ import { BsInfoCircle } from "react-icons/bs";
 import _ from "lodash";
 import { ContextInfo, TransactionContext } from "../context/TransactionContext";
 import { Loader } from "./";
+import { shortenAddress } from "../utils/shortenAddress";
 
 interface InputProps {
     placeholder: string;
@@ -81,7 +82,7 @@ const Welcome = () => {
                                 <BsInfoCircle fontSize={17} color='#fff' />
                             </div>
                             <div>
-                                <p className='text-white font-light text-sm'>0x</p>
+                                <p className='text-white font-light text-sm'>{shortenAddress(currentAccount)}</p>
                                 <p className='text-white font-semibold text-lg mt-1'>Ethereum</p>
                             </div>
                         </div>
