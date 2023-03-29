@@ -94,6 +94,20 @@ export const TransactionProvider = ({ children }: { children: React.ReactNode })
         }
     };
 
+    const checkIfTransactionsExist = async () => {
+        try {
+            const transactionsContract = getEthereumContract();
+
+            const transactionCount = await transactionsContract.getTransactionCount();
+
+            window.localStorage.setItem("transactionCount", transactionCount);
+        } catch (error) {
+            console.log("connectWallet_Error : ", error);
+
+            throw new Error("No ethereum object.");
+        }
+    };
+
     const connectWallet = async () => {
         try {
             if (!ethereum) return alert("metamask 설치해주세요");
@@ -155,6 +169,7 @@ export const TransactionProvider = ({ children }: { children: React.ReactNode })
 
     useEffect(() => {
         checkIfWalletIsConnected();
+        checkIfTransactionsExist();
     }, []);
 
     return (
