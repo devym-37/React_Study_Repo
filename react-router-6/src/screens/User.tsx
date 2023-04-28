@@ -12,7 +12,7 @@ const User = () => {
             </h1>
             <hr />
             <Link to='followers'>See Followers</Link>
-            <Outlet />
+            <Outlet context={{ name: users[Number(userId) - 1].name }} />
         </div>
     );
 };
