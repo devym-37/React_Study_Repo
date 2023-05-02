@@ -79,7 +79,12 @@ const Coin = () => {
         <CoinList>
           {coins.map((coin) => (
             <CoinItem key={coin.id}>
-              <Link to={`/coin/${coin.id}`}>
+              <Link
+                to={{
+                  pathname: `/coin/${coin.id}`,
+                }}
+                state={{ name: coin.name }}
+              >
                 <Img
                   src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
                 />
