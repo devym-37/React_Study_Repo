@@ -8,6 +8,8 @@ import {
 } from "react-router-dom";
 import styled from "styled-components";
 import { CoinInfo, CoinPrice } from "../types";
+import { useQuery } from "react-query";
+import { fetchCoinDetail, fetchCoinPrice } from "../api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -85,51 +87,30 @@ const Tab = styled.span<{ isActive: boolean }>`
   }
 `;
 
-interface CoinDetailInfo {
-  info: CoinInfo | null;
-  price: CoinPrice | null;
-}
-
 const CoinDetail = () => {
-  const [loading, setLoading] = useState(true);
   const { coinId } = useParams();
   const { state } = useLocation();
 
-  const [coin, setCoin] = useState<CoinDetailInfo>({
-    info: null,
-    price: null,
-  });
+  const { isLoading: detailLoading, data: info } = useQuery(
+    ["detail", coinId],
+    () => fetchCoinDetail(coinId)
+  );
+  const { isLoading: priceLoading, data: price } = useQuery(
+    ["price", coinId],
+    () => fetchCoinPrice(coinId)
+  );
 
   const chartMatch = useMatch("coin/:coinId/chart");
   const priceMatch = useMatch("coin/:coinId/price");
 
-  useEffect(() => {
-    (async () => {
-      const response = await fetch(
-        `https://api.coinpaprika.com/v1/coins/${coinId}`
-      );
-      const coinInfo = await response.json();
+  if ([info, price].every((data) => data === null)) return null;
 
-      const priceData = await (
-        await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-      ).json();
-
-      setCoin({
-        info: coinInfo,
-        price: priceData,
-      });
-      setLoading(false);
-    })();
-  }, [coinId]);
-
-  if ([coin.info, coin.price].every((data) => data === null)) return null;
+  const loading = detailLoading || priceLoading;
 
   return (
     <Container>
       <Header>
-        <Title>
-          {state?.name || loading ? "Loading..." : coin?.info?.name}
-        </Title>
+        <Title>{loading ? "Loading..." : info?.name}</Title>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>
@@ -138,20 +119,20 @@ const CoinDetail = () => {
           <OverView>
             <OverviewItem>
               <span>Rank:</span>
-              <span>{coin?.info?.rank}</span>
+              <span>{info?.rank}</span>
             </OverviewItem>
           </OverView>
 
-          <Description>{coin?.info?.description}</Description>
+          <Description>{info?.description}</Description>
 
           <OverView>
             <OverviewItem>
               <span>Total Suply:</span>
-              <span>{coin?.price?.total_supply}</span>
+              <span>{price?.total_supply}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Max Supply:</span>
-              <span>{coin?.price?.max_supply}</span>
+              <span>{price?.max_supply}</span>
             </OverviewItem>
           </OverView>
 
