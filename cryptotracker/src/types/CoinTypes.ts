@@ -42,3 +42,7 @@ export interface CoinPrice {
   first_data_at: string;
   last_updated: string;
 }
+
+export interface ContextTypes {
+  coinId: string;
+}

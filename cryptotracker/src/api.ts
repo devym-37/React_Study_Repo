@@ -15,3 +15,9 @@ export const fetchCoinPrice = (coinId: string | undefined) => {
     response.json()
   );
 };
+
+export const fetchCoinChart = (coinId: string) => {
+  return fetch(
+    `https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`
+  ).then((response) => response.json());
+};
