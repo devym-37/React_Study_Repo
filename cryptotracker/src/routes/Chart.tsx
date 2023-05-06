@@ -15,7 +15,10 @@ const Chart = () => {
 
   const { isLoading, data } = useQuery<CoinChartData[]>(
     ["coinChart", coinId],
-    () => fetchCoinChart(coinId)
+    () => fetchCoinChart(coinId),
+    {
+      refetchInterval: 10000,
+    }
   );
 
   console.log("coinId :>> ", data);

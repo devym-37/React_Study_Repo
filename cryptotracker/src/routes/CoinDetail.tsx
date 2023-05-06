@@ -97,7 +97,10 @@ const CoinDetail = () => {
   );
   const { isLoading: priceLoading, data: price } = useQuery(
     ["price", coinId],
-    () => fetchCoinPrice(coinId)
+    () => fetchCoinPrice(coinId),
+    {
+      refetchInterval: 5000,
+    }
   );
 
   const chartMatch = useMatch("coin/:coinId/chart");
@@ -120,6 +123,11 @@ const CoinDetail = () => {
             <OverviewItem>
               <span>Rank:</span>
               <span>{info?.rank}</span>
+            </OverviewItem>
+
+            <OverviewItem>
+              <span>Price:</span>
+              <span>{price?.quotes.USD.price}</span>
             </OverviewItem>
           </OverView>
 
