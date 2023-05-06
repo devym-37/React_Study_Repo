@@ -1,4 +1,4 @@
-import { useOutletContext, useParams } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import styled from "styled-components";
 import { CoinChartData, ContextTypes } from "../types";
 import { useQuery } from "react-query";
@@ -30,6 +30,7 @@ const Chart = () => {
             type="line"
             series={[
               {
+                name: `${coinId}`,
                 data: data?.map((price) => price.close) ?? [],
               },
             ]}
@@ -55,6 +56,8 @@ const Chart = () => {
                 axisTicks: {
                   show: false,
                 },
+                type: "datetime",
+                categories: data?.map((price) => price.time_close),
               },
               yaxis: {
                 show: false,
@@ -62,6 +65,19 @@ const Chart = () => {
               stroke: {
                 curve: "smooth",
                 width: 2,
+              },
+              fill: {
+                type: "gradient",
+                gradient: {
+                  gradientToColors: ["#0be881"],
+                  stops: [0, 100],
+                },
+              },
+              colors: ["#0fbcf9"],
+              tooltip: {
+                y: {
+                  formatter: (value) => `$ ${value.toFixed(2)}`,
+                },
               },
             }}
           />
