@@ -46,3 +46,14 @@ export interface CoinPrice {
 export interface ContextTypes {
   coinId: string;
 }
+
+export interface CoinChartData {
+  close: string;
+  high: string;
+  low: string;
+  market_cap: number;
+  open: string;
+  time_close: number;
+  time_open: number;
+  volume: string;
+}

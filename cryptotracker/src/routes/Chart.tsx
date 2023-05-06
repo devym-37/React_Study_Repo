@@ -1,6 +1,6 @@
 import { useOutletContext, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { ContextTypes } from "../types";
+import { CoinChartData, ContextTypes } from "../types";
 import { useQuery } from "react-query";
 import { fetchCoinChart } from "../api";
 
@@ -12,8 +12,9 @@ const Title = styled.h1`
 const Chart = () => {
   const { coinId } = useOutletContext<ContextTypes>();
 
-  const { isLoading, data } = useQuery(["coinChart", coinId], () =>
-    fetchCoinChart(coinId)
+  const { isLoading, data } = useQuery<CoinChartData[]>(
+    ["coinChart", coinId],
+    () => fetchCoinChart(coinId)
   );
 
   console.log("coinId :>> ", data);
