@@ -2,6 +2,7 @@ import { useOutletContext, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { CoinChartData, ContextTypes } from "../types";
 import { useQuery } from "react-query";
+import ApexChart from "react-apexcharts";
 import { fetchCoinChart } from "../api";
 
 const Title = styled.h1`
@@ -18,7 +19,56 @@ const Chart = () => {
   );
 
   console.log("coinId :>> ", data);
-  return <Title>Chart</Title>;
+  return (
+    <div>
+      {isLoading ? (
+        "loading chart..."
+      ) : (
+        <div>
+          <Title>Chart</Title>
+          <ApexChart
+            type="line"
+            series={[
+              {
+                data: data?.map((price) => price.close) ?? [],
+              },
+            ]}
+            options={{
+              theme: {
+                mode: "dark",
+              },
+              chart: {
+                height: 500,
+                width: 500,
+                toolbar: {
+                  show: false,
+                },
+                background: "transparent",
+              },
+              xaxis: {
+                labels: {
+                  show: false,
+                },
+                axisBorder: {
+                  show: false,
+                },
+                axisTicks: {
+                  show: false,
+                },
+              },
+              yaxis: {
+                show: false,
+              },
+              stroke: {
+                curve: "smooth",
+                width: 2,
+              },
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Chart;

@@ -48,7 +48,7 @@ export interface ContextTypes {
 }
 
 export interface CoinChartData {
-  close: string;
+  close: number;
   high: string;
   low: string;
   market_cap: number;
