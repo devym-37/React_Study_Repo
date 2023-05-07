@@ -4,6 +4,8 @@ import { CoinInterface } from "../types";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { fetchCoin } from "../api";
+import { useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -57,11 +59,17 @@ const Img = styled.img`
 
 const Coin = () => {
   const { isLoading, data } = useQuery<CoinInterface[]>("coinList", fetchCoin);
+  const setDark = useSetRecoilState(isDarkAtom);
+
+  const onToggleTheme = () => {
+    setDark((prev) => !prev);
+  };
 
   return (
     <Container>
       <Header>
         <Title>Coin</Title>
+        <button onClick={onToggleTheme}>Toggle Mode</button>
       </Header>
 
       {isLoading ? (

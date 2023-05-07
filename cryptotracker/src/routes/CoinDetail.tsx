@@ -53,7 +53,7 @@ const OverviewItem = styled.div`
     font-weight: 400;
     text-transform: uppercase;
     margin-bottom: 5px;
-    color: rgba(255, 255, 255, 1);
+    color: ${(props) => props.theme.textColor};
   }
 `;
 
@@ -62,7 +62,7 @@ const Description = styled.div`
   font-weight: 400;
   text-transform: uppercase;
   margin-bottom: 5px;
-  color: rgba(255, 255, 255, 1);
+  color: ${(props) => props.theme.textColor};
   margin: 10px;
 `;
 

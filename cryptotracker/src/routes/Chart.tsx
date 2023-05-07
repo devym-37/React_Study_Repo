@@ -4,6 +4,8 @@ import { CoinChartData, ContextTypes } from "../types";
 import { useQuery } from "react-query";
 import ApexChart from "react-apexcharts";
 import { fetchCoinChart } from "../api";
+import { isDarkAtom } from "../atoms";
+import { useRecoilValue } from "recoil";
 
 const Title = styled.h1`
   font-size: 48px;
@@ -11,6 +13,8 @@ const Title = styled.h1`
 `;
 
 const Chart = () => {
+  const isDark = useRecoilValue(isDarkAtom);
+
   const { coinId } = useOutletContext<ContextTypes>();
 
   const { isLoading, data } = useQuery<CoinChartData[]>(
@@ -39,7 +43,7 @@ const Chart = () => {
             ]}
             options={{
               theme: {
-                mode: "dark",
+                mode: isDark ? "dark" : "light",
               },
               chart: {
                 height: 500,
