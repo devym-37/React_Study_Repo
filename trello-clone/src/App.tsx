@@ -1,6 +1,8 @@
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { darkTheme } from "./theme";
+import { hourSelector, minuteState } from "./atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -61,11 +63,28 @@ a {
 `;
 
 function App() {
+  const [minutes, setMinutes] = useRecoilState(minuteState);
+
+  const hours = useRecoilValue(hourSelector);
+
+  const onMinutesChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setMinutes(+event.currentTarget.value);
+  };
+
   return (
     <>
       <ThemeProvider theme={darkTheme}>
         <GlobalStyle />
         <ReactQueryDevtools initialIsOpen />
+        <div>
+          <input
+            value={minutes}
+            onChange={onMinutesChange}
+            type="number"
+            placeholder="minutes"
+          />
+          <input value={hours} type="number" placeholder="hours" />
+        </div>
       </ThemeProvider>
     </>
   );
