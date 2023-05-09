@@ -65,10 +65,14 @@ a {
 function App() {
   const [minutes, setMinutes] = useRecoilState(minuteState);
 
-  const hours = useRecoilValue(hourSelector);
+  const [hours, setHours] = useRecoilState(hourSelector);
 
   const onMinutesChange = (event: React.FormEvent<HTMLInputElement>) => {
     setMinutes(+event.currentTarget.value);
+  };
+
+  const onHoursChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setHours(+event.currentTarget.value);
   };
 
   return (
@@ -83,7 +87,12 @@ function App() {
             type="number"
             placeholder="minutes"
           />
-          <input value={hours} type="number" placeholder="hours" />
+          <input
+            value={hours}
+            onChange={onHoursChange}
+            type="number"
+            placeholder="hours"
+          />
         </div>
       </ThemeProvider>
     </>
