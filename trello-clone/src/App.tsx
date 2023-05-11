@@ -1,5 +1,6 @@
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { DragDropContext } from "react-beautiful-dnd";
 import { darkTheme } from "./theme";
 import { hourSelector, minuteState } from "./atoms";
 import { useRecoilState, useRecoilValue } from "recoil";
