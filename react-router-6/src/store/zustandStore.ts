@@ -4,7 +4,7 @@ export interface UserStoreType {
   userCount: number;
 }
 
-export const userStore = create<UserStoreType>((set) => ({
+export const userStore = create<UserStoreType>()((set) => ({
   userCount: 0,
   increaseUserCount: () => set((state) => ({ userCount: state.userCount + 1 })),
   removeUserCount: () => set({ userCount: 0 }),
@@ -20,7 +20,7 @@ type Action = {
   updateLastName: (lastName: State["lastName"]) => void;
 };
 
-export const usePersonState = create<State & Action>((set) => ({
+export const usePersonState = create<State & Action>()((set) => ({
   firstName: "",
   lastName: "",
   updateFirstName: (firstName) => set({ firstName }),
