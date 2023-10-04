@@ -26,3 +26,16 @@ export const usePersonState = create<State & Action>()((set) => ({
   updateFirstName: (firstName) => set({ firstName }),
   updateLastName: (lastName) => set({ lastName }),
 }));
+
+export const updateFirstName = (firstName: State["firstName"]) =>
+  usePersonState.setState({ firstName });
+
+export const useBoundStore = create(() => ({
+  count: 0,
+  text: "hello",
+}));
+
+export const inc = () =>
+  useBoundStore.setState((state) => ({ count: state.count + 1 }));
+
+export const setText = (text: string) => useBoundStore.setState({ text });

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { users } from "../dummy";
 import {
   UserStoreType,
+  updateFirstName,
   usePersonState,
   userStore,
 } from "../store/zustandStore";
@@ -10,9 +11,9 @@ const Home = () => {
   const userCount = userStore((state: UserStoreType) => state.userCount);
 
   const firstName = usePersonState((state) => state.firstName);
-  const updateFirstName = usePersonState((state) => state.updateFirstName);
+  // const updateFirstName = usePersonState((state) => state.updateFirstName);
 
-  console.log("userCount", userCount);
+  console.log("userCount", firstName);
   return (
     <div>
       <h1>Users</h1>
