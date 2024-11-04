@@ -1,15 +1,12 @@
-class Paint {
+import AbstractPaint from "./AbstractPaint";
+
+class Paint extends AbstractPaint {
   private static instance: Paint;
 
-  private constructor(canvas: HTMLElement | null) {
-    if (!canvas || !(canvas instanceof HTMLCanvasElement)) {
-      throw new Error("Canvas not found");
-    }
-  }
-
   initialize() {}
+  initializeMenu() {}
 
-  static getInstance() {
+  static override getInstance() {
     // 단일책임원칙을 위배하고 있다고 할 수도 있다
     // 하지만, 싱글톤 패턴을 사용하는 이유는
     // 하나의 인스턴스만을 사용하기 위함이다.
